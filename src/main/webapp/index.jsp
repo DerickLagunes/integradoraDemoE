@@ -3,6 +3,8 @@
 <html>
 <head>
     <title>JSP - Hello World</title>
+    <link href="${pageContext.request.contextPath}/CSS/bootstrap.css" >
+    <link href="${pageContext.request.contextPath}/CSS/datatables.css" >
 </head>
 <body>
     <form method="post" action="login">

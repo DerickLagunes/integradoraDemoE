@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 // Estas clases DAO permiten el uso de funciones CRUD
 public class UsuarioDao {
@@ -60,6 +61,31 @@ public class UsuarioDao {
             e.printStackTrace();
         }
         return flag;
+    }
+
+    //Seria la R del CRUD
+    public ArrayList<Usuario> getAll(){
+        ArrayList<Usuario> lista = new ArrayList<>();
+        String query = "select * from usuario";
+        try{
+            Connection con = DatabaseConnectionManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Usuario u = new Usuario();
+                //Entonces llenamos la información del usuario
+                u.setId(rs.getInt("id"));
+                u.setNombre_usuario(rs.getString("nombre_usuario"));
+                u.setContra(rs.getString("contra"));
+                u.setCorreo(rs.getString("correo"));
+                u.setTipo_usuario(rs.getInt("tipo_usuario"));
+                u.setEstado(rs.getBoolean("estado"));
+                lista.add(u);
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return lista;
     }
 
 
