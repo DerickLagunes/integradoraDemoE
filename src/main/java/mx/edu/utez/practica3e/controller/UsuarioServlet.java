@@ -14,6 +14,15 @@ import java.io.IOException;
 @WebServlet(name="UsuarioServlet", value="/login")
 public class UsuarioServlet extends HttpServlet {
 
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        UsuarioDao dao = new UsuarioDao();
+        Usuario u = dao.getOne(id);
+        HttpSession sesion = req.getSession();
+        sesion.setAttribute("usuario",u);
+        resp.sendRedirect("registrarUsuario.jsp");
+    }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //1) Obtener la información del formulario
         String nombre_usuario = req.getParameter("nombre_usuario");

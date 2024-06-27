@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.SynchronousQueue;
 
 // Estas clases DAO permiten el uso de funciones CRUD
 public class UsuarioDao {
@@ -89,4 +90,45 @@ public class UsuarioDao {
     }
 
 
+    public Usuario getOne(int id) {
+        Usuario u = new Usuario();
+        String query = "select * from usuario where id = ?";
+        try{
+            Connection con = DatabaseConnectionManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                u.setId(rs.getInt("id"));
+                u.setNombre_usuario(rs.getString("nombre_usuario"));
+                u.setContra(rs.getString("contra"));
+                u.setCorreo(rs.getString("correo"));
+                u.setTipo_usuario(rs.getInt("tipo_usuario"));
+                u.setEstado(rs.getBoolean("estado"));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return u;
+    }
+
+    public boolean update(Usuario u) {
+        boolean flag = false;
+        String query = "update usuario set nombre_usuario = ?, contra = ?, correo = ?, tipo_usuario = ? where id = ?";
+        try{
+            Connection con = DatabaseConnectionManager.getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1,u.getNombre_usuario());
+            ps.setString(2,u.getContra());
+            ps.setString(3,u.getCorreo());
+            ps.setInt(4,u.getTipo_usuario());
+            ps.setInt(5,u.getId());
+            if(ps.executeUpdate()>0){
+                flag = true;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return flag;
+    }
 }
